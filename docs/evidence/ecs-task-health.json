@@ -1,0 +1,17 @@
+{
+    "Failures": [],
+    "Tasks": [
+        {
+            "Status": "RUNNING",
+            "Health": "HEALTHY",
+            "Containers": [
+                {
+                    "Name": "app",
+                    "Health": "HEALTHY",
+                    "Image": "732108543574.dkr.ecr.eu-west-2.amazonaws.com/finzla-dev@sha256:c3eebba13c771c6bb0dc40df505d487b12bb14f201e627f015f7bda767294e9e",
+                    "RuntimeDigest": "sha256:c3eebba13c771c6bb0dc40df505d487b12bb14f201e627f015f7bda767294e9e"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+[0m[1maws_iam_role.ecs_execution: Creating...[0m[0m
+[0m[1maws_ecr_repository.app: Creating...[0m[0m
+[0m[1maws_cloudwatch_log_group.app: Creating...[0m[0m
+[0m[1maws_ecs_cluster.app: Creating...[0m[0m
+[0m[1maws_ecr_repository.app: Creation complete after 1s [id=finzla-dev][0m
+[0m[1maws_cloudwatch_log_group.app: Creation complete after 1s [id=/ecs/finzla-dev][0m
+[0m[1maws_iam_role.ecs_execution: Creation complete after 3s [id=finzla-dev-ecs-execution][0m
+[0m[1maws_iam_role_policy.ecs_execution: Creating...[0m[0m
+[0m[1maws_iam_role_policy.ecs_execution: Creation complete after 1s [id=finzla-dev-ecs-execution:pull-image-and-write-logs][0m
+[0m[1maws_ecs_cluster.app: Still creating... [00m10s elapsed][0m[0m
+[0m[1maws_ecs_cluster.app: Creation complete after 12s [id=arn:aws:ecs:eu-west-2:732108543574:cluster/finzla-dev][0m
+Releasing state lock. This may take a few moments...
+[0m[1m[32m
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.[0m
+[0m[1m[32m
+Outputs:
+
+[0mapplication_log_group = "/ecs/finzla-dev"
+ecr_repository_url = "732108543574.dkr.ecr.eu-west-2.amazonaws.com/finzla-dev"
+ecs_cluster_name = "finzla-dev"
+networking = {
+  "nat_gateway_ids" = [
+    "nat-05fb7577727096363",
+  ]
+  "private_route_table_ids" = [
+    "rtb-0ba308216f80fc376",
+    "rtb-0becb952f50f06f42",
+  ]
+  "private_subnet_ids" = [
+    "subnet-036e82290c26c5454",
+    "subnet-0f9d32b6843d9f2e1",
+  ]
+  "public_route_table_id" = "rtb-05963ea6907b59095"
+  "public_subnet_ids" = [
+    "subnet-06692bc8a4c3a01d2",
+    "subnet-090f53ff691d20507",
+  ]
+  "vpc_id" = "vpc-0939b648292abb986"
+}
