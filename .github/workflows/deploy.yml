@@ -1,0 +1,53 @@
+name: Deploy application
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: application-deployment-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    uses: ./.github/workflows/pull-request.yml
+
+  deploy:
+    needs: checks
+    if: github.ref_name == 'develop' || github.ref_name == 'main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
+
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      AWS_REGION: eu-west-2
+      APP_NAME: ${{ github.ref_name == 'main' && 'finzla-prod' || 'finzla-dev' }}
+      SERVICE_URL: ${{ github.ref_name == 'main' && 'https://prod-assessment.kunlekush.name.ng' || 'https://assessment.kunlekush.name.ng' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        with:
+          aws-region: eu-west-2
+          allowed-account-ids: "732108543574"
+          role-to-assume: ${{ github.ref_name == 'main' && 'arn:aws:iam::732108543574:role/finzla-prod-github-deploy' || 'arn:aws:iam::732108543574:role/finzla-dev-github-deploy' }}
+          role-session-name: github-application-deploy
+
+      - name: Deploy and verify
+        shell: bash
+        run: bash scripts/deploy.sh

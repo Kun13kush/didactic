@@ -92,6 +92,10 @@ resource "aws_ecs_task_definition" "app" {
 }
 
 resource "aws_ecs_service" "app" {
+
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
   name            = var.name
   cluster         = aws_ecs_cluster.app.id
   task_definition = aws_ecs_task_definition.app.arn
