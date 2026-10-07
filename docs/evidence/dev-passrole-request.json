@@ -1,0 +1,15 @@
+{
+  "PolicySourceArn": "arn:aws:iam::732108543574:role/finzla-dev-github-deploy",
+  "ActionNames": ["iam:PassRole"],
+  "ResourceArns": [
+    "arn:aws:iam::732108543574:role/finzla-dev-ecs-execution",
+    "arn:aws:iam::732108543574:role/finzla-prod-ecs-execution"
+  ],
+  "ContextEntries": [
+    {
+      "ContextKeyName": "iam:PassedToService",
+      "ContextKeyValues": ["ecs-tasks.amazonaws.com"],
+      "ContextKeyType": "string"
+    }
+  ]
+}
