@@ -68,6 +68,7 @@ resource "aws_iam_role_policy" "plan" {
           "elasticloadbalancing:DescribeTargetGroups",
           "elasticloadbalancing:DescribeTargetGroupAttributes",
           "elasticloadbalancing:DescribeListeners",
+          "elasticloadbalancing:DescribeListenerAttributes",
           "elasticloadbalancing:DescribeTags"
         ]
         Resource = "*"
