@@ -1,4 +1,4 @@
-FROM python@sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2
+FROM python@sha256:f6a589d43c42b9e7f7dc67a12d37132491f362859a5d750607710cc56da3bc72
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -8,9 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN groupadd --gid 10001 appuser \
-    && useradd --uid 10001 --gid appuser \
-       --no-create-home --shell /usr/sbin/nologin appuser
+RUN addgroup -g 10001 appuser \
+    && adduser -D -H -u 10001 -G appuser -s /sbin/nologin appuser
 
 COPY app/requirements.txt /app/requirements.txt
 
