@@ -6,6 +6,7 @@ on:
       - develop
       - main
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -147,3 +148,98 @@ jobs:
             --scanners vuln \
             --severity HIGH,CRITICAL \
             --exit-code 1
+
+  terraform-plan:
+    name: Reviewed dev Terraform plan
+    needs: validate
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: terraform-plan
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout reviewed PR
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+        with:
+          terraform_version: "1.15.9"
+          terraform_wrapper: false
+
+      - name: Authenticate with planning role
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        with:
+          aws-region: eu-west-2
+          allowed-account-ids: "732108543574"
+          role-to-assume: arn:aws:iam::732108543574:role/finzla-dev-github-plan
+          role-duration-seconds: 900
+
+      - name: Initialize dev backend
+        run: |
+          terraform -chdir=terraform/environments/dev init \
+            -backend-config=backend.hcl \
+            -input=false \
+            -lockfile=readonly
+
+      - name: Read Terraform-managed release inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+
+          terraform -chdir=terraform/environments/dev show -json \
+            > "$RUNNER_TEMP/dev-state.json"
+
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          directory = Path(os.environ["RUNNER_TEMP"])
+          state = json.loads((directory / "dev-state.json").read_text())
+
+          def resources(module):
+              yield from module.get("resources", [])
+              for child in module.get("child_modules", []):
+                  yield from resources(child)
+
+          matches = [
+              resource for resource in resources(state["values"]["root_module"])
+              if resource["address"] == "module.platform.aws_ecs_task_definition.app"
+          ]
+          if len(matches) != 1:
+              raise SystemExit("Expected Terraform-managed application task definition")
+
+          containers = json.loads(matches[0]["values"]["container_definitions"])
+          container = next(item for item in containers if item["name"] == "app")
+          image = container["image"]
+          if "@sha256:" not in image:
+              raise SystemExit("Expected digest-pinned image")
+
+          environment = {
+              item["name"]: item["value"]
+              for item in container["environment"]
+          }
+          variables = {
+              "image_digest": image.split("@", 1)[1],
+              "app_version": environment["APP_VERSION"],
+          }
+          (directory / "release.tfvars.json").write_text(json.dumps(variables))
+          PY
+
+      - name: Plan dev infrastructure
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          terraform -chdir=terraform/environments/dev plan \
+            -input=false \
+            -lock-timeout=60s \
+            -var-file="$RUNNER_TEMP/release.tfvars.json"
