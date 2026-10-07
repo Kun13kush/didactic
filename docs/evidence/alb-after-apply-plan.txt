@@ -1,0 +1,46 @@
+[0m[1mmodule.networking.aws_vpc.this: Refreshing state... [id=vpc-0939b648292abb986][0m
+[0m[1mmodule.networking.aws_eip.nat[0]: Refreshing state... [id=eipalloc-019d17c4431cabddf][0m
+[0m[1mmodule.networking.aws_route_table.public: Refreshing state... [id=rtb-05963ea6907b59095][0m
+[0m[1mmodule.networking.aws_internet_gateway.this: Refreshing state... [id=igw-0a4cfb83026359b24][0m
+[0m[1mmodule.networking.aws_route_table.private[0]: Refreshing state... [id=rtb-0ba308216f80fc376][0m
+[0m[1mmodule.networking.aws_route_table.private[1]: Refreshing state... [id=rtb-0becb952f50f06f42][0m
+[0m[1mmodule.networking.aws_subnet.private[0]: Refreshing state... [id=subnet-036e82290c26c5454][0m
+[0m[1mmodule.networking.aws_subnet.private[1]: Refreshing state... [id=subnet-0f9d32b6843d9f2e1][0m
+[0m[1mmodule.networking.aws_subnet.public[1]: Refreshing state... [id=subnet-090f53ff691d20507][0m
+[0m[1mmodule.networking.aws_subnet.public[0]: Refreshing state... [id=subnet-06692bc8a4c3a01d2][0m
+[0m[1mmodule.networking.aws_route.public_internet: Refreshing state... [id=r-rtb-05963ea6907b590951080289494][0m
+[0m[1mmodule.networking.aws_route_table_association.private[1]: Refreshing state... [id=rtbassoc-029e7176e90af6cf4][0m
+[0m[1mmodule.networking.aws_route_table_association.private[0]: Refreshing state... [id=rtbassoc-089efda81e67b7e61][0m
+[0m[1mmodule.networking.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-02f79d0957dad077d][0m
+[0m[1mmodule.networking.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-073c23c254ac4005a][0m
+[0m[1mmodule.networking.aws_nat_gateway.this[0]: Refreshing state... [id=nat-05fb7577727096363][0m
+[0m[1mmodule.networking.aws_route.private_egress[0]: Refreshing state... [id=r-rtb-0ba308216f80fc3761080289494][0m
+[0m[1mmodule.networking.aws_route.private_egress[1]: Refreshing state... [id=r-rtb-0becb952f50f06f421080289494][0m
+[0m[1mmodule.platform.aws_ecr_repository.app: Refreshing state... [id=finzla-dev][0m
+[0m[1mmodule.platform.data.aws_region.current: Reading...[0m[0m
+[0m[1mmodule.platform.aws_ecs_cluster.app: Refreshing state... [id=arn:aws:ecs:eu-west-2:732108543574:cluster/finzla-dev][0m
+[0m[1mmodule.platform.aws_acm_certificate.app: Refreshing state... [id=arn:aws:acm:eu-west-2:732108543574:certificate/b336f736-7255-4b8b-93f6-0761208cb0ae][0m
+[0m[1mmodule.platform.aws_security_group.alb: Refreshing state... [id=sg-01a26ded4a8e8f40f][0m
+[0m[1mmodule.platform.aws_security_group.app: Refreshing state... [id=sg-0649195e92f1ff39c][0m
+[0m[1mmodule.platform.aws_cloudwatch_log_group.app: Refreshing state... [id=/ecs/finzla-dev][0m
+[0m[1mmodule.platform.aws_lb_target_group.app: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-2:732108543574:targetgroup/finzla-dev-app/b9978fa64a831e50][0m
+[0m[1mmodule.platform.data.aws_region.current: Read complete after 0s [id=eu-west-2][0m
+[0m[1mmodule.platform.aws_iam_role.ecs_execution: Refreshing state... [id=finzla-dev-ecs-execution][0m
+[0m[1mmodule.platform.aws_vpc_security_group_egress_rule.https: Refreshing state... [id=sgr-0a55ed51eb9d0b7d6][0m
+[0m[1mmodule.platform.aws_vpc_security_group_ingress_rule.app_from_alb: Refreshing state... [id=sgr-0dce3a73978370b6b][0m
+[0m[1mmodule.platform.aws_vpc_security_group_ingress_rule.alb_https: Refreshing state... [id=sgr-065e90a7e8faaef00][0m
+[0m[1mmodule.platform.aws_lb.app: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-2:732108543574:loadbalancer/app/finzla-dev-alb/365a6743bf9f995d][0m
+[0m[1mmodule.platform.aws_vpc_security_group_ingress_rule.alb_http: Refreshing state... [id=sgr-09b04ebd665d6527e][0m
+[0m[1mmodule.platform.aws_vpc_security_group_egress_rule.alb_to_app: Refreshing state... [id=sgr-0e5f93fd780079d67][0m
+[0m[1mmodule.platform.aws_lb_listener.http: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-2:732108543574:listener/app/finzla-dev-alb/365a6743bf9f995d/df4e8957ef455768][0m
+[0m[1mmodule.platform.aws_acm_certificate_validation.app: Refreshing state... [id=2026-10-07 18:29:13.05 +0000 UTC][0m
+[0m[1mmodule.platform.aws_lb_listener.https: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-2:732108543574:listener/app/finzla-dev-alb/365a6743bf9f995d/b9455a9ce412f1ae][0m
+[0m[1mmodule.platform.aws_iam_role_policy.ecs_execution: Refreshing state... [id=finzla-dev-ecs-execution:pull-image-and-write-logs][0m
+[0m[1mmodule.platform.aws_ecs_task_definition.app: Refreshing state... [id=finzla-dev][0m
+[0m[1mmodule.platform.aws_ecs_service.app: Refreshing state... [id=arn:aws:ecs:eu-west-2:732108543574:service/finzla-dev/finzla-dev][0m
+
+[0m[1m[32mNo changes.[0m[1m Your infrastructure matches the configuration.[0m
+
+[0mTerraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+Releasing state lock. This may take a few moments...

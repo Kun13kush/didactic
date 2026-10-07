@@ -33,21 +33,26 @@ resource "aws_ecs_task_definition" "app" {
   }
 
   container_definitions = jsonencode([{
-    name      = "app"
-    image     = "${aws_ecr_repository.app.repository_url}@${var.image_digest}"
-    essential = true
-    user      = "10001:10001"
+    name           = "app"
+    image          = "${aws_ecr_repository.app.repository_url}@${var.image_digest}"
+    essential      = true
+    mountPoints    = []
+    systemControls = []
+    volumesFrom    = []
+    user           = "10001:10001"
 
     readonlyRootFilesystem = true
 
     linuxParameters = {
       capabilities = {
+        add  = []
         drop = ["ALL"]
       }
     }
 
     portMappings = [{
       containerPort = 8000
+      hostPort      = 8000
       protocol      = "tcp"
     }]
 
@@ -93,6 +98,14 @@ resource "aws_ecs_service" "app" {
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
 
+  health_check_grace_period_seconds = 60
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app.arn
+    container_name   = "app"
+    container_port   = 8000
+  }
+
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
   wait_for_steady_state              = true
@@ -110,7 +123,10 @@ resource "aws_ecs_service" "app" {
 
   depends_on = [
     aws_iam_role_policy.ecs_execution,
-    aws_vpc_security_group_egress_rule.https
+    aws_vpc_security_group_egress_rule.https,
+    aws_lb_listener.https,
+    aws_vpc_security_group_egress_rule.alb_to_app,
+    aws_vpc_security_group_ingress_rule.app_from_alb
   ]
 }
 

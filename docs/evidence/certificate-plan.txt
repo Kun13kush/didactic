@@ -1,0 +1,141 @@
+[0m[1mmodule.networking.aws_vpc.this: Refreshing state... [id=vpc-0939b648292abb986][0m
+[0m[1mmodule.networking.aws_eip.nat[0]: Refreshing state... [id=eipalloc-019d17c4431cabddf][0m
+[0m[1mmodule.networking.aws_internet_gateway.this: Refreshing state... [id=igw-0a4cfb83026359b24][0m
+[0m[1mmodule.networking.aws_route_table.private[0]: Refreshing state... [id=rtb-0ba308216f80fc376][0m
+[0m[1mmodule.networking.aws_route_table.private[1]: Refreshing state... [id=rtb-0becb952f50f06f42][0m
+[0m[1mmodule.networking.aws_route_table.public: Refreshing state... [id=rtb-05963ea6907b59095][0m
+[0m[1mmodule.networking.aws_subnet.private[0]: Refreshing state... [id=subnet-036e82290c26c5454][0m
+[0m[1mmodule.networking.aws_subnet.private[1]: Refreshing state... [id=subnet-0f9d32b6843d9f2e1][0m
+[0m[1mmodule.networking.aws_subnet.public[1]: Refreshing state... [id=subnet-090f53ff691d20507][0m
+[0m[1mmodule.networking.aws_subnet.public[0]: Refreshing state... [id=subnet-06692bc8a4c3a01d2][0m
+[0m[1mmodule.networking.aws_route.public_internet: Refreshing state... [id=r-rtb-05963ea6907b590951080289494][0m
+[0m[1mmodule.networking.aws_route_table_association.private[1]: Refreshing state... [id=rtbassoc-029e7176e90af6cf4][0m
+[0m[1mmodule.networking.aws_route_table_association.private[0]: Refreshing state... [id=rtbassoc-089efda81e67b7e61][0m
+[0m[1mmodule.networking.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-02f79d0957dad077d][0m
+[0m[1mmodule.networking.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-073c23c254ac4005a][0m
+[0m[1mmodule.networking.aws_nat_gateway.this[0]: Refreshing state... [id=nat-05fb7577727096363][0m
+[0m[1mmodule.networking.aws_route.private_egress[0]: Refreshing state... [id=r-rtb-0ba308216f80fc3761080289494][0m
+[0m[1mmodule.networking.aws_route.private_egress[1]: Refreshing state... [id=r-rtb-0becb952f50f06f421080289494][0m
+[0m[1mmodule.platform.aws_cloudwatch_log_group.app: Refreshing state... [id=/ecs/finzla-dev][0m
+[0m[1mmodule.platform.data.aws_region.current: Reading...[0m[0m
+[0m[1mmodule.platform.aws_ecr_repository.app: Refreshing state... [id=finzla-dev][0m
+[0m[1mmodule.platform.aws_security_group.app: Refreshing state... [id=sg-0649195e92f1ff39c][0m
+[0m[1mmodule.platform.aws_ecs_cluster.app: Refreshing state... [id=arn:aws:ecs:eu-west-2:732108543574:cluster/finzla-dev][0m
+[0m[1mmodule.platform.aws_iam_role.ecs_execution: Refreshing state... [id=finzla-dev-ecs-execution][0m
+[0m[1mmodule.platform.data.aws_region.current: Read complete after 0s [id=eu-west-2][0m
+[0m[1mmodule.platform.aws_vpc_security_group_egress_rule.https: Refreshing state... [id=sgr-0a55ed51eb9d0b7d6][0m
+[0m[1mmodule.platform.aws_iam_role_policy.ecs_execution: Refreshing state... [id=finzla-dev-ecs-execution:pull-image-and-write-logs][0m
+[0m[1mmodule.platform.aws_ecs_task_definition.app: Refreshing state... [id=finzla-dev][0m
+[0m[1mmodule.platform.aws_ecs_service.app: Refreshing state... [id=arn:aws:ecs:eu-west-2:732108543574:service/finzla-dev/finzla-dev][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [32m+[0m create[0m
+  [33m~[0m update in-place[0m
+[31m-[0m/[32m+[0m destroy and then create replacement[0m
+
+Terraform will perform the following actions:
+
+[1m  # module.platform.aws_acm_certificate.app[0m will be created
+[0m  [32m+[0m[0m resource "aws_acm_certificate" "app" {
+      [32m+[0m[0m arn                       = (known after apply)
+      [32m+[0m[0m domain_name               = "assessment.kunlekush.name.ng"
+      [32m+[0m[0m domain_validation_options = [
+          [32m+[0m[0m {
+              [32m+[0m[0m domain_name           = "assessment.kunlekush.name.ng"
+              [32m+[0m[0m resource_record_name  = (known after apply)
+              [32m+[0m[0m resource_record_type  = (known after apply)
+              [32m+[0m[0m resource_record_value = (known after apply)
+            },
+        ]
+      [32m+[0m[0m id                        = (known after apply)
+      [32m+[0m[0m key_algorithm             = (known after apply)
+      [32m+[0m[0m not_after                 = (known after apply)
+      [32m+[0m[0m not_before                = (known after apply)
+      [32m+[0m[0m pending_renewal           = (known after apply)
+      [32m+[0m[0m private_key_wo            = (write-only attribute)
+      [32m+[0m[0m region                    = "eu-west-2"
+      [32m+[0m[0m renewal_eligibility       = (known after apply)
+      [32m+[0m[0m renewal_summary           = (known after apply)
+      [32m+[0m[0m status                    = (known after apply)
+      [32m+[0m[0m subject_alternative_names = [
+          [32m+[0m[0m "assessment.kunlekush.name.ng",
+        ]
+      [32m+[0m[0m tags_all                  = {
+          [32m+[0m[0m "Environment" = "dev"
+          [32m+[0m[0m "ManagedBy"   = "Terraform"
+          [32m+[0m[0m "Project"     = "finzla"
+        }
+      [32m+[0m[0m type                      = (known after apply)
+      [32m+[0m[0m validation_emails         = (known after apply)
+      [32m+[0m[0m validation_method         = "DNS"
+
+      [32m+[0m[0m options (known after apply)
+    }
+
+[1m  # module.platform.aws_ecs_service.app[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_ecs_service" "app" {
+        id                                 = "arn:aws:ecs:eu-west-2:732108543574:service/finzla-dev/finzla-dev"
+        name                               = "finzla-dev"
+        tags                               = {}
+      [33m~[0m[0m task_definition                    = "arn:aws:ecs:eu-west-2:732108543574:task-definition/finzla-dev:1" -> (known after apply)
+        [90m# (18 unchanged attributes hidden)[0m[0m
+
+        [90m# (4 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.platform.aws_ecs_task_definition.app[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "aws_ecs_task_definition" "app" {
+      [33m~[0m[0m arn                      = "arn:aws:ecs:eu-west-2:732108543574:task-definition/finzla-dev:1" -> (known after apply)
+      [33m~[0m[0m arn_without_revision     = "arn:aws:ecs:eu-west-2:732108543574:task-definition/finzla-dev" -> (known after apply)
+      [33m~[0m[0m container_definitions    = jsonencode(
+          [33m~[0m[0m [
+              [33m~[0m[0m {
+                  [33m~[0m[0m linuxParameters        = {
+                      [33m~[0m[0m capabilities = {
+                          [31m-[0m[0m add  = []
+                            [90m# (1 unchanged attribute hidden)[0m[0m
+                        }
+                    }
+                  [31m-[0m[0m mountPoints            = []
+                    name                   = "app"
+                  [33m~[0m[0m portMappings           = [
+                      [33m~[0m[0m {
+                          [31m-[0m[0m hostPort      = 8000
+                            [90m# (2 unchanged attributes hidden)[0m[0m
+                        },
+                    ]
+                  [31m-[0m[0m systemControls         = []
+                  [31m-[0m[0m volumesFrom            = []
+                    [90m# (7 unchanged attributes hidden)[0m[0m
+                },
+            ] [31m# forces replacement[0m[0m
+        )
+      [33m~[0m[0m enable_fault_injection   = false -> (known after apply)
+      [33m~[0m[0m id                       = "finzla-dev" -> (known after apply)
+      [33m~[0m[0m revision                 = 1 -> (known after apply)
+      [31m-[0m[0m tags                     = {} [90m-> null[0m[0m
+        [90m# (13 unchanged attributes hidden)[0m[0m
+
+        [90m# (1 unchanged block hidden)[0m[0m
+    }
+
+[1mPlan:[0m [0m2 to add, 1 to change, 1 to destroy.
+
+Changes to Outputs:
+  [32m+[0m[0m certificate_arn         = (known after apply)
+  [32m+[0m[0m certificate_dns_records = [
+      [32m+[0m[0m {
+          [32m+[0m[0m name  = (known after apply)
+          [32m+[0m[0m type  = (known after apply)
+          [32m+[0m[0m value = (known after apply)
+        },
+    ]
+[90m
+─────────────────────────────────────────────────────────────────────────────[0m
+
+Saved the plan to: certificate.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "certificate.tfplan"
+Releasing state lock. This may take a few moments...

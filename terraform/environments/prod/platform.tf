@@ -1,5 +1,7 @@
 module "platform" {
-  source = "../../modules/platform"
+  public_subnet_ids = module.networking.public_subnet_ids
+  domain_name       = var.domain_name
+  source            = "../../modules/platform"
 
   name               = "finzla-prod"
   environment        = "prod"
