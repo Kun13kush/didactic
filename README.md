@@ -44,3 +44,25 @@ Save actual validation output under docs/evidence/.
 The pinned test dependencies currently emit a Starlette deprecation
 warning about httpx. Tests passed with that warning on the earlier
 Windows run; Ubuntu validation must be recorded separately.
+
+## Docker
+
+Build from the repository root:
+
+```bash
+IMAGE_TAG=$(git rev-parse HEAD)
+docker build -t "finzla-app:${IMAGE_TAG}" .
+docker run -d --name finzla-app \
+  --read-only \
+  --tmpfs /tmp:rw,noexec,nosuid,size=16m \
+  --cap-drop ALL \
+  --security-opt no-new-privileges=true \
+  -p 127.0.0.1:8001:8000 \
+  -e APP_ENV=dev \
+  -e APP_VERSION="$IMAGE_TAG" \
+  "finzla-app:${IMAGE_TAG}"
+Check /health and /version at http://127.0.0.1:8001.
+Container health is available through docker inspect.
+The runtime user is UID 10001.
+Local image vulnerability scanning remains pending because Docker Scout
+is unavailable. See docs/milestone-2.md for validation and limitations.

@@ -1,0 +1,2 @@
+Image scan not performed: Docker Scout is unavailable locally.
+Image vulnerability scanning remains pending for CI/CD.

@@ -1,0 +1,45 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 888B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python@sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2
+#2 DONE 1.9s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 113B done
+#3 DONE 0.1s
+
+#4 [1/6] FROM docker.io/library/python@sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2
+#4 resolve docker.io/library/python@sha256:f85c5697265c178cc6887276c55fe16cf3d14ca35c3df6a5eab3b360534a55d2 0.1s done
+#4 CACHED
+
+#5 [internal] load build context
+#5 transferring context: 1.65kB done
+#5 DONE 0.1s
+
+#6 [2/6] WORKDIR /app
+#6 DONE 0.1s
+
+#7 [3/6] RUN groupadd --gid 10001 appuser     && useradd --uid 10001 --gid appuser        --no-create-home --shell /usr/sbin/nologin appuser
+#7 DONE 1.2s
+
+#8 [4/6] COPY app/requirements.txt /app/requirements.txt
+#8 DONE 0.1s
+
+#9 [5/6] RUN python -m pip install --no-cache-dir -r /app/requirements.txt
+#9 3.221 Ignoring colorama: markers 'sys_platform == "win32"' don't match your environment
+#9 4.831 Collecting fastapi==0.142.2 (from -r /app/requirements.txt (line 1))
+#9 5.914   Downloading fastapi-0.142.2-py3-none-any.whl.metadata (27 kB)
+#9 6.293 Collecting uvicorn==0.54.0 (from -r /app/requirements.txt (line 2))
+#9 6.629   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+#9 6.989 Collecting starlette==1.7.0 (from -r /app/requirements.txt (line 3))
+#9 7.287   Downloading starlette-1.7.0-py3-none-any.whl.metadata (6.6 kB)
+#9 8.089 Collecting pydantic==2.13.5 (from -r /app/requirements.txt (line 4))
+#9 8.479   Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+#9 11.08 Collecting pydantic-core==2.46.5 (from -r /app/requirements.txt (line 5))
+#9 11.44   Downloading pydantic_core-2.46.5-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+#9 11.77 Collecting typing-extensions==4.16.0 (from -r /app/requirements.txt (line 6))
+#9 12.16   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#9 12.49 Collecting typing-inspection==0.4.4 (from -r /app/requirements.txt (line 7))
