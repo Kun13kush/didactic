@@ -1,0 +1,45 @@
+name: Check OIDC identity
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  identity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show subject and audience only
+        shell: bash
+        run: |
+          node <<'JS'
+          async function main() {
+            const url = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+            url.searchParams.set("audience", "sts.amazonaws.com");
+
+            const response = await fetch(url, {
+              headers: {
+                Authorization: `Bearer ${process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN}`
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`Token request failed: ${response.status}`);
+            }
+
+            const { value } = await response.json();
+            const claims = JSON.parse(
+              Buffer.from(value.split(".")[1], "base64url").toString("utf8")
+            );
+
+            console.log(`Subject: ${claims.sub}`);
+            console.log(`Audience: ${claims.aud}`);
+          }
+
+          main().catch(() => {
+            console.error("OIDC identity check failed");
+            process.exit(1);
+          });
+          JS
