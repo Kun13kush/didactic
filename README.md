@@ -66,3 +66,42 @@ Container health is available through docker inspect.
 The runtime user is UID 10001.
 Local image vulnerability scanning remains pending because Docker Scout
 is unavailable. See docs/milestone-2.md for validation and limitations.
+
+## Terraform foundation and remote state
+
+Terraform roots are separated into bootstrap, dev, and prod.
+
+The bootstrap root manages the S3 state bucket. Its initial local state
+is migrated to S3 after the bucket is created and verified.
+
+State bucket: finzla-tfstate-732108543574-eu-west-2
+Region: eu-west-2
+
+State keys:
+- bootstrap/terraform.tfstate
+- dev/terraform.tfstate
+- prod/terraform.tfstate
+
+The bucket has SSE-S3 encryption, versioning, public access blocking,
+disabled ACLs, and an HTTPS-only access policy.
+
+Each backend enables native S3 locking with use_lockfile=true.
+Terraform acquires a temporary lock object for operations requiring
+state locking, preventing concurrent writes to the same state key.
+Never bypass locking or force-unlock without confirming the original
+operation is no longer running.
+
+State access requires authorized IAM permissions. Current access
+depends on existing account IAM policies; dedicated scoped roles
+will be introduced during IAM hardening. Separate state keys do not
+by themselves prevent a principal from accessing both environments.
+
+Engineers must use the shared production backend. Independent local
+production state can produce conflicting resource ownership and
+unsafe changes.
+
+State files, backups, saved plans and .terraform directories must
+never be committed. Provider .terraform.lock.hcl files are committed.
+
+Bucket versioning supports recovery of earlier state versions, but
+restoration must be coordinated with actual infrastructure changes.

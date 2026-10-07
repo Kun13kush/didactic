@@ -17,3 +17,10 @@ __pycache__/
 crash.log
 *.tfvars
 !*.tfvars.example
+
+# Terraform generated state and plan files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
