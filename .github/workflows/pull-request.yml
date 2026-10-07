@@ -1,0 +1,147 @@
+name: Pull request checks
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate application and Terraform
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+
+    env:
+      TRIVY_IMAGE: aquasec/trivy@sha256:af6acf9a6b85dfe389a1941505c0ce9efef52a4719635e1a962f022a3d855daa
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.14"
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: "1.15.9"
+          terraform_wrapper: false
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Application tests
+        run: |
+          python -m pytest -q
+          python -m pip check
+
+      - name: Terraform formatting
+        run: terraform fmt -check -recursive terraform
+
+      - name: Terraform validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for ROOT in \
+            terraform/bootstrap \
+            terraform/identity \
+            terraform/environments/dev \
+            terraform/environments/prod
+          do
+            terraform -chdir="$ROOT" init \
+              -backend=false \
+              -input=false \
+              -lockfile=readonly
+
+            terraform -chdir="$ROOT" validate
+          done
+
+      - name: Scan checked-out files for secrets
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/src:ro" \
+            "$TRIVY_IMAGE" fs \
+            --scanners secret \
+            --exit-code 1 \
+            /src
+
+      - name: Build application image
+        run: |
+          docker build --platform linux/amd64 \
+            -t "finzla-ci:$GITHUB_SHA" .
+
+      - name: Container acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker run -d --name finzla-ci \
+            --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid,size=16m \
+            --cap-drop ALL \
+            --security-opt no-new-privileges=true \
+            -p 127.0.0.1:8001:8000 \
+            -e APP_ENV=test \
+            -e APP_VERSION="$GITHUB_SHA" \
+            "finzla-ci:$GITHUB_SHA"
+
+          trap 'docker logs finzla-ci; docker rm -f finzla-ci' EXIT
+
+          for ATTEMPT in $(seq 1 12); do
+            STATUS=$(docker inspect \
+              --format '{{.State.Health.Status}}' finzla-ci)
+            [ "$STATUS" = healthy ] && break
+            sleep 5
+          done
+
+          test "$(docker inspect \
+            --format '{{.State.Health.Status}}' finzla-ci)" = healthy
+
+          test "$(docker exec finzla-ci id -u)" = 10001
+
+          python - <<'PY'
+          import json
+          import os
+          from urllib.request import urlopen
+
+          expected = {
+              "/health": {"status": "healthy"},
+              "/version": {"version": os.environ["GITHUB_SHA"]},
+          }
+
+          for path, body in expected.items():
+              with urlopen(f"http://127.0.0.1:8001{path}", timeout=5) as response:
+                  assert response.status == 200
+                  assert json.load(response) == body
+
+          print("Container acceptance: PASS")
+          PY
+
+      - name: Scan image vulnerabilities
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker save "finzla-ci:$GITHUB_SHA" \
+            --output "$RUNNER_TEMP/finzla-ci.tar"
+
+          docker run --rm \
+            -v "$RUNNER_TEMP:/images:ro" \
+            "$TRIVY_IMAGE" image \
+            --input /images/finzla-ci.tar \
+            --scanners vuln \
+            --severity HIGH,CRITICAL \
+            --exit-code 1
