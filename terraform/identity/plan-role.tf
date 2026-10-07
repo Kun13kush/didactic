@@ -56,6 +56,7 @@ resource "aws_iam_role_policy" "plan" {
           "ec2:DescribeInternetGateways",
           "ec2:DescribeNatGateways",
           "ec2:DescribeAddresses",
+          "ec2:DescribeAddressesAttribute",
           "ec2:DescribeSecurityGroups",
           "ec2:DescribeSecurityGroupRules",
           "ec2:DescribeTags",
