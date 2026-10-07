@@ -105,3 +105,18 @@ never be committed. Provider .terraform.lock.hcl files are committed.
 
 Bucket versioning supports recovery of earlier state versions, but
 restoration must be coordinated with actual infrastructure changes.
+
+## AWS networking
+
+A shared module creates separate dev and prod VPCs across two AZs.
+Each VPC has two public and two private subnets.
+
+Dev uses one NAT Gateway to reduce cost.
+Prod defines one NAT Gateway per AZ for outbound resilience.
+Public subnets route through an Internet Gateway; private subnets
+route through NAT. Automatic public IP assignment is disabled.
+
+Dev networking has been applied. Prod remains unapplied.
+Application connectivity will be verified after ECS deployment.
+
+See docs/milestone-4.md and docs/evidence/ for details.

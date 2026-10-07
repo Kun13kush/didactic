@@ -1,0 +1,52 @@
+{
+    "Desired": 1,
+    "Running": 1,
+    "Pending": 0,
+    "Deployments": [
+        {
+            "id": "ecs-svc/8339047713765115410",
+            "status": "PRIMARY",
+            "taskDefinition": "arn:aws:ecs:eu-west-2:732108543574:task-definition/finzla-dev:1",
+            "desiredCount": 1,
+            "pendingCount": 0,
+            "runningCount": 1,
+            "failedTasks": 0,
+            "createdAt": "2026-10-07T19:09:54.737000+01:00",
+            "updatedAt": "2026-10-07T19:11:32.857000+01:00",
+            "launchType": "FARGATE",
+            "platformVersion": "1.4.0",
+            "platformFamily": "Linux",
+            "networkConfiguration": {
+                "awsvpcConfiguration": {
+                    "subnets": [
+                        "subnet-0f9d32b6843d9f2e1",
+                        "subnet-036e82290c26c5454"
+                    ],
+                    "securityGroups": [
+                        "sg-0649195e92f1ff39c"
+                    ],
+                    "assignPublicIp": "DISABLED"
+                }
+            },
+            "rolloutState": "COMPLETED",
+            "rolloutStateReason": "ECS deployment ecs-svc/8339047713765115410 completed."
+        }
+    ],
+    "Events": [
+        {
+            "id": "28c7be73-10bd-4327-b3ef-d312ef7751ea",
+            "createdAt": "2026-10-07T19:11:32.864000+01:00",
+            "message": "(service finzla-dev) has reached a steady state."
+        },
+        {
+            "id": "87f6d2ff-b569-437d-8229-8de24a301bef",
+            "createdAt": "2026-10-07T19:11:32.863000+01:00",
+            "message": "(service finzla-dev) (deployment ecs-svc/8339047713765115410) deployment completed."
+        },
+        {
+            "id": "73be3b48-41f5-4808-bb14-9e483e0eed62",
+            "createdAt": "2026-10-07T19:10:12.609000+01:00",
+            "message": "(service finzla-dev) has started 1 tasks: (task 70e5332370864f678a1682b38d0827ae)."
+        }
+    ]
+}
