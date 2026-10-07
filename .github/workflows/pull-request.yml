@@ -142,7 +142,7 @@ jobs:
             -v "$RUNNER_TEMP:/images:ro" \
             "$TRIVY_IMAGE" image \
             --timeout 15m \
-            --db-repository ghcr.io/aquasec/trivy-db:2 \
+            --db-repository ghcr.io/aquasecurity/trivy-db:2 \
             --input /images/finzla-ci.tar \
             --scanners vuln \
             --severity HIGH,CRITICAL \
