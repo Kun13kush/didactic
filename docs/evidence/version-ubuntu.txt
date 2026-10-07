@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+date: Wed, 07 Oct 2026 17:11:56 GMT
+server: uvicorn
+content-length: 25
+content-type: application/json
+
+{"version":"milestone-1"}
