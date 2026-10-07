@@ -2,44 +2,37 @@ name: Check OIDC identity
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to test
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - production
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   identity:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
-      - name: Show subject and audience only
-        shell: bash
-        run: |
-          node <<'JS'
-          async function main() {
-            const url = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
-            url.searchParams.set("audience", "sts.amazonaws.com");
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        with:
+          aws-region: eu-west-2
+          allowed-account-ids: "732108543574"
+          role-duration-seconds: 900
+          role-session-name: github-oidc-check
+          role-to-assume: ${{ inputs.environment == 'production' && 'arn:aws:iam::732108543574:role/finzla-prod-github-deploy' || 'arn:aws:iam::732108543574:role/finzla-dev-github-deploy' }}
 
-            const response = await fetch(url, {
-              headers: {
-                Authorization: `Bearer ${process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN}`
-              }
-            });
-
-            if (!response.ok) {
-              throw new Error(`Token request failed: ${response.status}`);
-            }
-
-            const { value } = await response.json();
-            const claims = JSON.parse(
-              Buffer.from(value.split(".")[1], "base64url").toString("utf8")
-            );
-
-            console.log(`Subject: ${claims.sub}`);
-            console.log(`Audience: ${claims.aud}`);
-          }
-
-          main().catch(() => {
-            console.error("OIDC identity check failed");
-            process.exit(1);
-          });
-          JS
+      - name: Verify AWS caller
+        run: aws sts get-caller-identity
