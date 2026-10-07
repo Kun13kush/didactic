@@ -14,7 +14,9 @@ RUN groupadd --gid 10001 appuser \
 
 COPY app/requirements.txt /app/requirements.txt
 
-RUN python -m pip install --no-cache-dir -r /app/requirements.txt
+RUN python -m pip install --no-cache-dir -r /app/requirements.txt \
+    && python -m pip check \
+    && python -m pip uninstall --yes pip
 
 COPY app/__init__.py app/main.py /app/app/
 
